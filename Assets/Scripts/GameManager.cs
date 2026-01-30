@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Health playerHealth;
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        SceneManager.LoadScene("SampleScene");
         playerHealth.ResetHealth();
         timeController.ResumeTime();
     }

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obstacle
   speed: 30
-  despawnTimer: 5
+  despawnTimer: 8
 --- !u!1 &4134486478370296540
 GameObject:
   m_ObjectHideFlags: 0
