@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Obstacle : MonoBehaviour
@@ -15,5 +16,6 @@ public class Obstacle : MonoBehaviour
     private void Update()
     {
         transform.position += speed * Time.deltaTime * Vector3.back; 
+
     }
 }

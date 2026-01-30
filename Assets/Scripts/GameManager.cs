@@ -2,15 +2,35 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Health playerHealth;
+
+    private ITimeController timeController;
+    private IDeatheable deathPlayer;
+
+    private void Awake()
     {
-        
+        timeController = new TimeController();
+        deathPlayer = playerHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        deathPlayer.OnDeath += HandlePlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        deathPlayer.OnDeath -= HandlePlayerDeath;
+    }
+
+    private void HandlePlayerDeath()
+    {
+        timeController.PauseTime();
+    }
+
+    public void RestartGame()
+    {
+        playerHealth.ResetHealth();
+        timeController.ResumeTime();
     }
 }
