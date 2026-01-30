@@ -8,9 +8,9 @@ public class PlayerCollisionHandler : MonoBehaviour
     
     private float lastDamageTime;
     
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Obstacle") && CanTakeDamage())
+        if (other.gameObject.CompareTag("Obstacle") && CanTakeDamage())
         {
             health.TakeDamage(damage);
             lastDamageTime = Time.time;
