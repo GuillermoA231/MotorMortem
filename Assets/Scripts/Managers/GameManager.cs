@@ -18,7 +18,15 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        timeController = new TimeController();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         deathPlayer = playerHealth;
     }
 
@@ -26,7 +34,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        timeController.PauseTime();
+
         Menu();
     }
     private void OnEnable()
@@ -42,14 +50,12 @@ public class GameManager : MonoBehaviour
     private void HandlePlayerDeath()
     {
         Lose();
-        timeController.PauseTime();
         scoreManager.ShowScore();
     }
 
     public void RestartGame()
     {
         playerHealth.ResetHealth();
-        timeController.ResumeTime();
         scoreManager.SetScore(false, 0);
         Menu();
     }
@@ -62,17 +68,32 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
 
-    public void StartGame() {
+    public void StartGame()
+    {
         SetGameState(GameState.GAME);
-        Debug.Log("startingame");
-        timeController.ResumeTime();
     }
     public void PauseGame() => SetGameState(GameState.PAUSE);
-    public void Menu() => SetGameState(GameState.MENU);
+    public void Menu()
+    {
+        SetGameState(GameState.MENU);
+    }
     public void Lose() => SetGameState(GameState.GAMEOVER);
     public void SetGameState(GameState gameState)
     {
         CurrentGameState = gameState;
+
+        switch (gameState)
+        {
+            case GameState.GAME:
+                Time.timeScale = 1f;
+                break;
+
+            case GameState.PAUSE:
+            case GameState.MENU:
+            case GameState.GAMEOVER:
+                Time.timeScale = 0f;
+                break;
+        }
 
         IEnumerable<IGameStateListener> gameStateListeners =
         FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)

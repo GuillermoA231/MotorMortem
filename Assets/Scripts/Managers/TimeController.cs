@@ -9,72 +9,85 @@ public class TimeController : MonoBehaviour
     public static Action onGamePaused;
     public static Action onGameResumed;
 
-    private bool isPaused;
-    private bool canPause = true;
-
     private GameInputAction input;
+
+    private bool isPaused = false;
+    private bool canPause = true;
 
     private void Awake()
     {
+        Debug.Log("TimeController Awake: " + gameObject.name);
         input = new GameInputAction();
-
-        // Subscribe to Pause action
-        Debug.Log(GameManager.CurrentGameState);
-        input.Player.Pause.performed += OnPause;
     }
 
     private void OnEnable()
     {
+        // Enable input and subscribe
         input.Enable();
+        input.Player.Pause.performed += OnPause;
     }
 
     private void OnDisable()
     {
+        // Unsubscribe and disable to prevent stacking
+        input.Player.Pause.performed -= OnPause;
         input.Disable();
     }
 
     private void OnDestroy()
     {
-        input.Player.Pause.performed -= OnPause;
+        // Extra safety (optional, but good practice)
+        if (input != null)
+        {
+            input.Player.Pause.performed -= OnPause;
+            input.Disable();
+        }
     }
 
     private void OnPause(InputAction.CallbackContext context)
     {
-        if (GameManager.CurrentGameState == GameState.GAME && canPause)
-        {
-            TogglePause();
-        }
-        if (GameManager.CurrentGameState == GameState.PAUSE && canPause)
+        if (!canPause)
+            return;
+
+        if (GameManager.CurrentGameState == GameState.GAME ||
+            GameManager.CurrentGameState == GameState.PAUSE && canPause)
         {
             TogglePause();
         }
     }
 
-    public void PauseTime() => Time.timeScale = 0f;
-
-    public void ResumeTime() => Time.timeScale = 1f;
-
-    public void TogglePause()
+    private void TogglePause()
     {
         isPaused = !isPaused;
 
         if (isPaused)
         {
-            Time.timeScale = 0;
-            uIManager.GamePausedCallback();
+            canPause = false;
+            GameManager.instance.PauseGame();
             PauseButtonCallback();
         }
         else
         {
-            Time.timeScale = 1;
-            uIManager.GameResumedCallback();
+            canPause = true;
+            GameManager.instance.StartGame();
             ResumeButtonCallback();
         }
     }
 
+
     public bool IsPaused()
     {
-        return isPaused;
+        if (GameManager.CurrentGameState == GameState.PAUSE ||
+            GameManager.CurrentGameState == GameState.GAMEOVER ||
+            GameManager.CurrentGameState == GameState.MENU)
+        {
+            canPause = false;
+            return isPaused;
+        }
+
+        // Force unpaused in other states
+        isPaused = false;
+        return false;
     }
 
     public void CanPause(bool check)
@@ -82,12 +95,12 @@ public class TimeController : MonoBehaviour
         canPause = check;
     }
 
-    public void PauseButtonCallback()
+    private void PauseButtonCallback()
     {
         onGamePaused?.Invoke();
     }
 
-    public void ResumeButtonCallback()
+    private void ResumeButtonCallback()
     {
         onGameResumed?.Invoke();
     }
