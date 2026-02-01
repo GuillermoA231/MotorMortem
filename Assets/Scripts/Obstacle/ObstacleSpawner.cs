@@ -7,13 +7,14 @@ public class ObstacleSpawner : MonoBehaviour
 
     public Transform obstacleSpawnPoint;
 
-    public float obstacleSpawnDelay;
+    [SerializeField] private float minSpawnDelay = 1f;
+    [SerializeField] private float maxSpawnDelay = 3f;
 
     private bool canSpawn = true;
 
     private void Update()
     {
-        if(canSpawn)
+        if (canSpawn)
         {
             canSpawn = false;
             StartCoroutine(SpawnObstacle());
@@ -21,12 +22,13 @@ public class ObstacleSpawner : MonoBehaviour
     }
     public IEnumerator SpawnObstacle()
     {
-        yield return new WaitForSeconds(obstacleSpawnDelay);
+        float randomDelay = Random.Range(minSpawnDelay, maxSpawnDelay);
+        yield return new WaitForSeconds(randomDelay);
 
-        GameObject randomObstacle =  obstacles[Random.Range(0,obstacles.Length)];
+        GameObject randomObstacle = obstacles[Random.Range(0, obstacles.Length)];
 
-        Instantiate(randomObstacle,obstacleSpawnPoint.transform.position,Quaternion.identity);
+        Instantiate(randomObstacle, obstacleSpawnPoint.transform.position, Quaternion.identity);
 
-        canSpawn =true;
+        canSpawn = true;
     }
 }
