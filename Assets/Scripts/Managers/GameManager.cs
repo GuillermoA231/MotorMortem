@@ -7,6 +7,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Health playerHealth;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private TimeController timeController;
+    [SerializeField] private UIManager UIManager;
+
+    [Header("Actions")]
+    public static GameState CurrentGameState { get; private set; }
+
+    private ScoreManager scoreManagerInstance;
     // private ITimeController timeController;
     private IDeatheable deathPlayer;
 
@@ -16,6 +22,13 @@ public class GameManager : MonoBehaviour
         deathPlayer = playerHealth;
     }
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+        timeController.PauseTime();
+        Menu();
+    }
     private void OnEnable()
     {
         deathPlayer.OnDeath += HandlePlayerDeath;
@@ -28,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     private void HandlePlayerDeath()
     {
+        Lose();
         timeController.PauseTime();
         scoreManager.ShowScore();
     }
@@ -36,8 +50,8 @@ public class GameManager : MonoBehaviour
     {
         playerHealth.ResetHealth();
         timeController.ResumeTime();
-        scoreManager.SetScore(false,0);
-        SceneManager.LoadScene("SampleScene");
+        scoreManager.SetScore(false, 0);
+        Menu();
     }
 
 
@@ -46,24 +60,20 @@ public class GameManager : MonoBehaviour
 
 
     public static GameManager instance;
-    
-    [Header("Actions")]
-    public static GameState CurrentGameState { get; private set; }
 
-    private ScoreManager scoreManagerInstance;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        Application.targetFrameRate = 60;
-        SetGameState(GameState.MENU);
+
+    public void StartGame() {
+        SetGameState(GameState.GAME);
+        Debug.Log("startingame");
+        timeController.ResumeTime();
     }
-
-    public void StartGame() => SetGameState(GameState.GAME);
+    public void PauseGame() => SetGameState(GameState.PAUSE);
     public void Menu() => SetGameState(GameState.MENU);
+    public void Lose() => SetGameState(GameState.GAMEOVER);
     public void SetGameState(GameState gameState)
     {
         CurrentGameState = gameState;
-        
+
         IEnumerable<IGameStateListener> gameStateListeners =
         FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
         .OfType<IGameStateListener>();
