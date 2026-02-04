@@ -3,8 +3,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Minx and MaxX Clamps the horizontal movement of the player to avoid clipping out of the ground 
     [SerializeField] private float minX = -5f;
     [SerializeField] private float maxX = 5f;
+    
+    [Header("Motorbike-like movement")] //Helps with game feel and smoother movement
     [SerializeField] private float maxTurnSpeed = 5f;
     [SerializeField] private float turnAcceleration = 8f;
     [SerializeField] private float turnDeceleration = 10f;

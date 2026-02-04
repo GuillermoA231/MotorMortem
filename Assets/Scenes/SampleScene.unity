@@ -2756,7 +2756,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3685,6 +3685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1407359966}
+  - component: {fileID: 1407359974}
   - component: {fileID: 1407359967}
   - component: {fileID: 1407359968}
   - component: {fileID: 1407359969}
@@ -3721,7 +3722,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407359965}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 014d0499207948d4d954f2f1c4c15ea0, type: 3}
   m_Name: 
@@ -3889,6 +3890,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEffects
   health: {fileID: 1407359969}
   ppManager: {fileID: 1823363465}
+--- !u!114 &1407359974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407359965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ef7756a7a17fbd47b0a448e8c672b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementTwo
+  speed: 5
+  rb: {fileID: 841392935}
+  minX: -4
+  maxX: 4
+  maxTurnSpeed: 10
+  turnAcceleration: 100
+  turnDeceleration: 50
 --- !u!1 &1478512159
 GameObject:
   m_ObjectHideFlags: 0
