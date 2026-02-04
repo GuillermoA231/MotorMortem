@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float turnDeceleration = 10f;
     
     private float currentHorizontalVelocity = 0f;
-    
     private void Update()
     {
         Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
@@ -45,3 +44,4 @@ public class PlayerMovement : MonoBehaviour
         transform.position = new Vector3(newX, transform.position.y, transform.position.z);
     }
 }
+
