@@ -436,8 +436,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6a5747d6279a84b8d6fbb1b0003a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obstacle
-  speed: 30
-  despawnTimer: 8
+  speed: 40
+  despawnTimer: 10
 --- !u!1 &8757332258644132088
 GameObject:
   m_ObjectHideFlags: 0
